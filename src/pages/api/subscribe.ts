@@ -13,9 +13,10 @@ type User = {
   }
 }
 
-const SubscribeRequest = async (request: NextApiRequest, response: NextApiResponse) => {
-  if (request.method === 'POST') {
-    const session = await getSession({ req: request });
+// eslint-disable-next-line import/no-anonymous-default-export
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === 'POST') {
+    const session = await getSession({ req: req });
 
     const user = await fauna.query<User>(
       q.Get(
@@ -61,11 +62,9 @@ const SubscribeRequest = async (request: NextApiRequest, response: NextApiRespon
       cancel_url: process.env.STRIPE_CANCEL_URL
     });
 
-    return response.status(200).json({ sessionId: stripeCheckoutSession.id });
+    return res.status(200).json({ sessionId: stripeCheckoutSession.id });
   } else {
-    response.setHeader('Allow', 'POST');
-    response.status(405).end('Method not allowed');
+    res.setHeader('Allow', 'POST');
+    res.status(405).end('Method not allowed');
   }
 }
-
-export default SubscribeRequest;
