@@ -14,7 +14,8 @@ export default NextAuth({
         params: {
           scope: 'read:user'
         }
-      }
+      },
+      checks: 'both'
     }),
   ],
   secret: process.env.NEXT_PUBLIC_SECRET,
